@@ -3,7 +3,7 @@ mongoose.connect("mongodb://localhost/book-app");
 
 
 var Book = require('./book.js');
-var author = require('./author.js');
+var Author = require('./author.js');
 
-exports.Book = Book;
-exports.author = author;
+module.exports.Book = Book;
+module.exports.Buthor = Author;

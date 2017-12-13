@@ -8,16 +8,6 @@ var BookSchema = new Schema({
 	release_date: String 
 });
 
-var Book = mongoose.model('Book', BookSchema);
-
-
-
-
-
-
-
-
-
-var book = mongoose.model('Book', BookSchema);
+var Book = mongoose.model('book', BookSchema);
 
 module.exports = Book;
