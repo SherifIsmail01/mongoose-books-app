@@ -6,4 +6,4 @@ var Book = require('./book.js');
 var Author = require('./author.js');
 
 module.exports.Book = Book;
-module.exports.Buthor = Author;
+module.exports.Author = Author;

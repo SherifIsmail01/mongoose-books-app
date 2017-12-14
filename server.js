@@ -42,62 +42,66 @@ app.get('/', function (req, res) {
 // get all books
 app.get('/api/books', function (req, res) {
   // send all books as JSON response
-  db.Book.find(function (err, allBooks){
+  db.Book.find()
+  .populate('author')
+  .exec(function (err, books) {
     if (err) {
-      console.log("index error: " + err);
-      res.sendStatus(500);
+       console.log ("index error: " + err);
     }
-    res.json(allBooks);
+    res.json(books);
   }); 
 });
 
 // get one book
 app.get('/api/books/:id', function (req, res) {
   // find one book by its id
- var bookId = req.params.id;
- db.Book.findOne({ _id: bookId}, function (err, foundBook){
-  res.json(foundBook);
- });
+     var bookId = req.params.id;
+       db.Book.findOne()
+       .populate('author')
+       .exec(function (err, book){
+          if (err) {
+            console.log ("show error: " + err);
+          }
+       
+        res.json(book);
+     });
 });
 
 // create new book
 app.post('/api/books', function (req, res) {
   // create new book with form data (`req.body`)
-  console.log('books create', req.body);
-  var newBook = new db.Book(req.body);
-  newBook.save(function DBBookSaved(err, savedBook){
-  res.json(savedBook);
- });
+    var newBook = new db.Book({
+      title: req.body.title,
+      image: req.body.image,
+      releaseDate: req.body.releaseDate,
+    });
+  res.json(newBook);
 });
+
+
 
 // update book
-app.put('/api/books/:id', function(req,res){
+app.put('/api/books/:id', function(req, res) {
+
+  db.bookId = req.params.id;
+  db.Book.findOneAndUpdate(db.bookId, req.body, {new: true}, function (err, updatedBook){
+      res.json(updatedBook);
+  
 // get book id from url params (`req.params`)
-  console.log('books update', req.params);
-  var bookId = req.params.id;
 
-  db.Book.findOne({ _id: bookId}, function (err, foundBook){
-    foundBook.title = req.body.title;
-    foundBook.author = req.body.author;
+  })});
+  
 
-    foundBook.save(function (err, savedBook) {
-      res.json(savedBook);
-    });
-  });
-});
 
 // delete book
 app.delete('/api/books/:id', function (req, res) {
   // get book id from url params (`req.params`)
-  console.log('books delete', req.params);
   var bookId = req.params.id;
   // find the index of the book we want to remove
   db.Book.findOneAndRemove({ _id: bookId}, function (err, deletedBook){
     res.json(deletedBook);
   });
 });
-
-
 
 
 
