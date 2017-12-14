@@ -52,7 +52,22 @@ app.get('/api/books/:id', function (req, res) {
 
 });
 
-
+app.post('/api/books/:book_id/characters', function(rea, res){
+  var bookId = req.params._id;
+  db.Book.findById(bookId)
+  .populate('author')
+  .exec(function(err, foundBook){
+    if (err) {
+      console.log (err);
+    }
+    characters.push(req.body);
+    book.save(function (err, savedCharacter){
+      if (err) {
+        console.log (err);
+      }
+    });
+  });
+});
 
 app.post('/api/books', function (req, res) {
   // create new book with form data (`req.body`)
